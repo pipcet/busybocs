@@ -32,7 +32,7 @@ build/done/configure/memtool: build/done/copy/memtool | build/done/configure/
 	touch $@
 
 build/done/copy/memtool: | build/memtool/ build/done/copy/
-	cp -av subrepo/memtool/* build/memtool
+	cp -a subrepo/memtool/* build/memtool
 	touch $@
 
 build/done/install/kexec-tools: build/done/build/kexec-tools | build/done/install/
@@ -49,7 +49,7 @@ build/done/configure/kexec-tools: build/done/copy/kexec-tools | build/done/confi
 	touch $@
 
 build/done/copy/kexec-tools: | build/kexec-tools/ build/done/copy/
-	cp -av subrepo/kexec-tools/* build/kexec-tools
+	cp -a subrepo/kexec-tools/* build/kexec-tools
 	touch $@
 
 build/done/install/busybox: build/done/build/busybox | build/done/install/
@@ -65,7 +65,7 @@ build/done/configure/busybox: build/done/copy/busybox | build/done/configure/
 	touch $@
 
 build/done/copy/busybox: | build/busybox/ build/done/copy/
-	cp -av subrepo/busybox/* build/busybox
+	cp -a subrepo/busybox/* build/busybox
 	touch $@
 
 build/done/install/emacs: build/done/build/emacs | build/done/install/
@@ -82,7 +82,7 @@ build/done/configure/emacs: build/done/copy/emacs | build/done/configure/
 	touch $@
 
 build/done/copy/emacs: | build/emacs/ build/done/copy/
-	cp -av subrepo/emacs/* build/emacs
+	cp -a subrepo/emacs/* build/emacs
 	touch $@
 
 build/done/install/ncurses: build/done/build/ncurses | build/done/install/
@@ -98,5 +98,5 @@ build/done/configure/ncurses: build/done/copy/ncurses | build/done/configure/
 	touch $@
 
 build/done/copy/ncurses: | build/ncurses/ build/done/copy/
-	cp -av subrepo/ncurses/* build/ncurses
+	cp -a subrepo/ncurses/* build/ncurses
 	touch $@
