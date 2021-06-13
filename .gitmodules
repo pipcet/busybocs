@@ -2,3 +2,11 @@
 	path = subrepo/busybox
 	url = https://github.com/pipcet/busybox
 	branch = pearl
+[submodule "subrepo/emacs"]
+	path = subrepo/emacs
+	url = https://github.com/pipcet/emacs
+	branch = pearl
+[submodule "subrepo/kexec-tools"]
+	path = subrepo/kexec-tools
+	url = https://github.com/pipcet/kexec-tools
+	branch = pearl
