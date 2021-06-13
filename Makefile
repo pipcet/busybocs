@@ -100,3 +100,5 @@ build/done/configure/ncurses: build/done/copy/ncurses | build/done/configure/
 build/done/copy/ncurses: | build/ncurses/ build/done/copy/
 	cp -a subrepo/ncurses/* build/ncurses
 	touch $@
+
+include github/github.mk
