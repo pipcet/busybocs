@@ -10,3 +10,7 @@
 	path = subrepo/kexec-tools
 	url = https://github.com/pipcet/kexec-tools
 	branch = pearl
+[submodule "subrepo/memtool"]
+	path = subrepo/memtool
+	url = https://github.com/pipcet/memtool
+	branch = main
