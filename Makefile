@@ -72,7 +72,7 @@ build/done/install/emacs: build/done/build/emacs | build/done/install/
 	$(MAKE) -C build/emacs install
 	touch $@
 
-build/done/build/emacs: build/done/configure/emacs | build/done/build/
+build/done/build/emacs: build/done/configure/emacs build/done/install/ncurses | build/done/build/
 	$(MAKE) -C build/emacs/src emacs
 	touch $@
 
