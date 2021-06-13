@@ -1,0 +1,4 @@
+[submodule "subrepo/busybox"]
+	path = subrepo/busybox
+	url = https://github.com/pipcet/busybox
+	branch = pearl
