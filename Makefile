@@ -72,11 +72,11 @@ build/done/install/emacs: build/done/build/emacs | build/done/install/
 	$(MAKE) -C build/emacs install
 	touch $@
 
-build/done/build/emacs: build/done/configure/emacs build/done/install/ncurses | build/done/build/
+build/done/build/emacs: build/done/configure/emacs | build/done/build/
 	$(MAKE) -C build/emacs/src emacs
 	touch $@
 
-build/done/configure/emacs: build/done/copy/emacs | build/done/configure/
+build/done/configure/emacs: build/done/copy/emacs build/done/install/ncurses | build/done/configure/
 	(cd build/emacs; sh autogen.sh)
 	(cd build/emacs; ./configure --without-all --without-json --without-x --host=aarch64-linux-gnu LDFLAGS="-L$(PWD)/build/install/lib" CFLAGS="-static" --target=aarch64-linux-gnu --prefix=$(PWD)/build/install)
 	touch $@
