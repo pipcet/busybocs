@@ -14,3 +14,7 @@
 	path = subrepo/memtool
 	url = https://github.com/pipcet/memtool
 	branch = main
+[submodule "subrepo/ncurses"]
+	path = subrepo/ncurses
+	url = https://github.com/pipcet/ncurses
+	branch = pearl
