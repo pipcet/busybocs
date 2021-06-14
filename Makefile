@@ -118,7 +118,7 @@ build/done/build/ncurses: build/done/configure/ncurses | build/done/build/
 	touch $@
 
 build/done/configure/ncurses: build/done/copy/ncurses | build/done/configure/
-	(cd build/ncurses; ./configure --host=aarch64-linux-gnu --target=aarch64-linux-gnu --prefix=$(PWD)/build/install --disable-stripping)
+	(cd build/ncurses; ./configure --host=aarch64-linux-gnu --target=aarch64-linux-gnu --prefix=/ --with-install-prefix=$(PWD)/build/install --disable-stripping)
 	touch $@
 
 build/done/copy/ncurses: | build/ncurses/ build/done/copy/
