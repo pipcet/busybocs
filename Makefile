@@ -69,7 +69,7 @@ build/done/copy/busybox: | build/busybox/ build/done/copy/
 	touch $@
 
 build/done/install/emacs: build/done/build/emacs | build/done/install/
-	$(MAKE) -C build/emacs install
+	$(MAKE) -C build/emacs DESTDIR=$(PWD)/build/install/ install
 	touch $@
 
 build/done/build/emacs: build/done/configure/emacs | build/done/build/
@@ -78,7 +78,7 @@ build/done/build/emacs: build/done/configure/emacs | build/done/build/
 
 build/done/configure/emacs: build/done/copy/emacs build/done/install/ncurses | build/done/configure/
 	(cd build/emacs; sh autogen.sh)
-	(cd build/emacs; ./configure --without-all --without-json --without-x --host=aarch64-linux-gnu LDFLAGS="-L$(PWD)/build/install/lib" CFLAGS="-static" --target=aarch64-linux-gnu --prefix=$(PWD)/build/install)
+	(cd build/emacs; ./configure --without-all --without-json --without-x --host=aarch64-linux-gnu LDFLAGS="-L$(PWD)/build/install/lib" CFLAGS="-static" --target=aarch64-linux-gnu --prefix=/)
 	touch $@
 
 build/done/copy/emacs: | build/emacs/ build/done/copy/
