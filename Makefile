@@ -16,6 +16,17 @@ clean:
 	rm -rf build
 
 build/busybocs.tar: build/done/install/emacs build/done/install/busybox build/done/install/kexec-tools build/done/install/memtool
+	rm -rf build/install/share/info
+	rm -rf build/install/share/emacs/*/lisp/gnus
+	rm -rf build/install/share/emacs/*/lisp/cedet
+	rm -rf build/install/share/emacs/*/lisp/leim
+	rm -rf build/install/share/emacs/*/etc/images
+	rm -rf build/install/share/emacs/*/lisp/erc
+	rm -rf build/install/share/emacs/*/etc/tutorials
+	rm -rf build/install/share/emacs/*/lisp/emulation
+	rm -rf build/install/lib/*.a
+	rm -rf build/install/include
+	rm -rf build/install/share/icons
 	tar -C build/install -cvf $@ .
 
 build/done/install/memtool: build/done/build/memtool | build/done/install/
