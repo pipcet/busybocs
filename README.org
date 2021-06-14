@@ -1,0 +1,66 @@
+First off: [[https://www.busybox.net][BusyBox]] is great. You should use it.
+
+When I first used busybox, it did everything I needed it to. It had a
+shell. It had mount. It had ifconfig.
+
+Then I started using LVM2, cryptroot, kexec, and WiFi.
+
+For whatever reason (and I suspect most of the reason is licensing
+wars), busybox doesn't support any of those things.
+
+There is also one rather big thing that I missed: Emacs. It's not as
+horrible as people would lead you to believe, either: a packed and
+working Emacs installation is 16 MB, compressed. For that, you get a
+scripting language (replacing Perl), bignums (usable ones, unlike
+Perl's), a workable optimized terminal library (replacing dialog and
+ncurses), an event loop...everything you need to build a usable
+interactive terminal application, which is what I specifically needed.
+
+(You don't get all the bells and whistles, which is why I said
+"working Emacs installation" rather than "complete Emacs
+installation". No ERC, for example, and no Gnus.)
+
+This repository provides CI/CD to grab a few packages, notably busybox
+and Emacs, build them for the right architecture (currently
+aarch64-linux-gnu, for obvious reasons), and tar them up. They're not
+combined into mixed binaries, so I think I'm not in trouble
+licensing-wise.
+
+Current packages:
+- busybox
+- ncurses
+- emacs
+- kexec-tools
+- memtool
+
+Future packages:
+- wpasupplicant
+- cryptsetup
+- lvm2
+- nvme-cli
+
+** Why is it uncompressed?
+
+To save space. Let me explain: compression is great, but when you
+compress already-compressed data, you generally won't be able to
+reduce the size as much as you could just compressing the original
+data. Furthermore, you won't be able to exploit redundancies between
+what you'd compressed already and any newly-compressed data.
+
+For example, if you're using git, even if you have no version history
+to speak of, you keep a poorly-compressed version of your data in your
+.git dirs, in addition to the uncompressed version you work
+with. There's no (easy) way to exploit the redundancy between the two
+versions. Hacks like git-lfs become necessary.
+
+So it's important (if you care about a few megabytes, that is) to
+leave compression until the last possible time to do it, and to
+compress as much data as is possible in one go. Ideally, and we're
+getting there slowly, compression is something that user applications
+do not worry about at all, and it happens at the FS or network level,
+and that makes it both better and more convenient, as well as more
+consistent.
+
+This repository in particular is meant to produce a tarball for
+another repository to include, so it makes particular sense to leave
+it uncompressed.
