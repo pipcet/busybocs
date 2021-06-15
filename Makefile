@@ -251,7 +251,7 @@ build/libuuid/done/copy: | build/libuuid/build/ build/libuuid/done/
 	cp -a subrepo/util-linux/* build/libuuid/build
 	touch $@
 
-build/libaio/done/install: build/libaio/done/build | build/busybocs/install/done/install/ build/ build/busybocs/install/
+build/libaio/done/install: build/libaio/done/build | build/libaio/done/ build/ build/busybocs/install/
 	$(MAKE) -C build/libaio/build CC=aarch64-linux-gnu-gcc CFLAGS="$(MY_CFLAGS) -I." DESTDIR=$(PWD)/build/busybocs/install/ install
 	touch $@
 
@@ -263,12 +263,12 @@ build/libaio/done/copy: | build/libaio/build/ build/libaio/done/
 	cp -a subrepo/libaio/* build/libaio/build
 	touch $@
 
-build/wpa_supplicant/done/install: build/wpa_supplicant/done/build | build/busybocs/install/done/install/ build/ build/busybocs/install/
+build/wpa_supplicant/done/install: build/wpa_supplicant/done/build | build/wpa_supplicant/done/ build/ build/busybocs/install/
 	$(MAKE) -C build/wpa_supplicant/build/wpa_supplicant LIBDIR=$(PWD)/build/busybocs/install/lib INCDIR=$(PWD)/build/busybocs/install/include BINDIR=$(PWD)/build/busybocs/install/sbin install
 	touch $@
 
 build/wpa_supplicant/done/build: build/wpa_supplicant/done/configure | build/wpa_supplicant/done/
-	$(MAKE) -C build/wpa_supplicant/build/wpa_supplicant CC=aarch64-linux-gnu-gcc EXTRA_CFLAGS="$(MY_CFLAGS)" LDFLAGS="--sysroot=$(PWD)/build/busybocs/install -I$(PWD)/build/busybocs/install/include -L$(PWD)/build/busybocs/install/lib"
+	$(MAKE) -C build/wpa_supplicant/build/wpa_supplicant CC=aarch64-linux-gnu-gcc EXTRA_CFLAGS="$(MY_CFLAGS) -I$(PWD)/build/busybocs/install/include/libnl3" LDFLAGS="--sysroot=$(PWD)/build/busybocs/install -I$(PWD)/build/busybocs/install/include -L$(PWD)/build/busybocs/install/lib"
 	touch $@
 
 build/wpa_supplicant/done/configure: build/wpa_supplicant/done/copy build/openssl/done/install build/libnl/done/install build/glibc/done/install | build/wpa_supplicant/done/
