@@ -206,7 +206,7 @@ build/lvm2/done/build: build/lvm2/done/configure | build/lvm2/done/
 	$(MAKE) -C build/lvm2/build
 	touch $@
 
-build/lvm2/done/configure: build/lvm2/done/copy build/libaio/done/install build/libblkid/done/install | build/lvm2/done/
+build/lvm2/done/configure: build/lvm2/done/copy build/libaio/done/install build/libblkid/done/install build/glibc/done/install | build/lvm2/done/
 	(cd build/lvm2/build; ./configure --host=aarch64-linux-gnu --target=aarch64-linux-gnu --prefix=/ CFLAGS="-B$(PWD)/build/busybocs/install -Os -I$(PWD)/build/busybocs/install/include --sysroot=$(PWD)/build/busybocs/install" LDFLAGS="-L$(PWD)/build/busybocs/install/lib")
 	touch $@
 
