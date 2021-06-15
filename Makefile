@@ -189,7 +189,7 @@ build/libnl/done/build: build/libnl/done/configure | build/libnl/done/
 	$(MAKE) -C build/libnl/build
 	touch $@
 
-build/libnl/done/configure: build/libnl/done/copy | build/libnl/done/
+build/libnl/done/configure: build/libnl/done/copy build/glibc/done/install | build/libnl/done/
 	(cd build/libnl/build; sh autogen.sh)
 	(cd build/libnl/build; ./configure --host=aarch64-linux-gnu --target=aarch64-linux-gnu --prefix=/ CFLAGS="-Os -I$(PWD)/build/busybocs/install/include --sysroot=$(PWD)/build/busybocs/install" LDFLAGS="-L$(PWD)/build/busybocs/install/lib")
 	touch $@
