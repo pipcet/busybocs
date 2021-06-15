@@ -252,11 +252,11 @@ build/libuuid/done/copy: | build/libuuid/build/ build/libuuid/done/
 	touch $@
 
 build/libaio/done/install: build/libaio/done/build | build/busybocs/install/done/install/ build/ build/busybocs/install/
-	$(MAKE) -C build/libaio/build CC=aarch64-linux-gnu-gcc CFLAGS="$(MY_CFLAGS)" DESTDIR=$(PWD)/build/busybocs/install/ install
+	$(MAKE) -C build/libaio/build CC=aarch64-linux-gnu-gcc CFLAGS="$(MY_CFLAGS) -I." DESTDIR=$(PWD)/build/busybocs/install/ install
 	touch $@
 
-build/libaio/done/build: build/libaio/done/copy | build/libaio/done/
-	$(MAKE) -C build/libaio/build CC=aarch64-linux-gnu-gcc CFLAGS="$(MY_CFLAGS)"
+build/libaio/done/build: build/libaio/done/copy build/glibc/done/install | build/libaio/done/
+	$(MAKE) -C build/libaio/build CC=aarch64-linux-gnu-gcc CFLAGS="$(MY_CFLAGS) -I."
 	touch $@
 
 build/libaio/done/copy: | build/libaio/build/ build/libaio/done/
