@@ -24,5 +24,5 @@ jobs:
     - run: sudo apt-get install lzop
     - run: sudo apt-get install libipc-run-perl
     - run: sudo apt-get install gettext
-    - run: make -j3 build/busybocs.tar
+    - run: make -kj3 build/busybocs.tar
     - run: make -j3 build/busybocs.tar{artifact}

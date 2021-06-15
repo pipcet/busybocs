@@ -74,7 +74,7 @@ build/memtool/done/build: build/memtool/done/configure | build/memtool/done/
 
 build/memtool/done/configure: build/memtool/done/copy build/glibc/done/install | build/memtool/done/
 	(cd build/memtool/build; autoreconf -fi)
-	(cd build/memtool/build; ./configure --host=aarch64-linux-gnu --prefix=$(PWD)/build/busybocs/install)
+	(cd build/memtool/build; ./configure --host=aarch64-linux-gnu --target=aarch64-linux-gnu --prefix=$(PWD)/build/busybocs/install)
 	touch $@
 
 build/memtool/done/copy: | build/memtool/build/ build/memtool/done/
