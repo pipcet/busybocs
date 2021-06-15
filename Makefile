@@ -268,10 +268,11 @@ build/wpa_supplicant/done/install: build/wpa_supplicant/done/build | build/busyb
 	touch $@
 
 build/wpa_supplicant/done/build: build/wpa_supplicant/done/configure | build/wpa_supplicant/done/
-	$(MAKE) -C build/wpa_supplicant/build/wpa_supplicant CC=aarch64-linux-gnu-gcc EXTRA_CFLAGS="$(MY_CFALGS)" LDFLAGS="--sysroot=$(PWD)/build/busybocs/install -I$(PWD)/build/busybocs/install/include -L$(PWD)/build/busybocs/install/lib"
+	$(MAKE) -C build/wpa_supplicant/build/wpa_supplicant CC=aarch64-linux-gnu-gcc EXTRA_CFLAGS="$(MY_CFLAGS)" LDFLAGS="--sysroot=$(PWD)/build/busybocs/install -I$(PWD)/build/busybocs/install/include -L$(PWD)/build/busybocs/install/lib"
 	touch $@
 
 build/wpa_supplicant/done/configure: build/wpa_supplicant/done/copy build/openssl/done/install build/libnl/done/install build/glibc/done/install | build/wpa_supplicant/done/
+	sed -i -e 's/^CONFIG_CTRL_IFACE_DBUS/# CONFIG_CTRL_IFACE_DBUS/g' build/wpa_supplicant/build/wpa_supplicant/defconfig
 	$(CP) build/wpa_supplicant/build/wpa_supplicant/defconfig build/wpa_supplicant/build/wpa_supplicant/.config
 	touch $@
 
