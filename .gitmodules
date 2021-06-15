@@ -18,3 +18,34 @@
 	path = subrepo/ncurses
 	url = https://github.com/pipcet/ncurses
 	branch = pearl
+[submodule "subrepo/glibc"]
+	path = subrepo/glibc
+	url = https://github.com/pipcet/glibc
+	branch = pearl
+[submodule "subrepo/cryptsetup"]
+	path = subrepo/cryptsetup
+	url = https://gitlab.com/cryptsetup/cryptsetup
+[submodule "subrepo/lvm2"]
+	path = subrepo/lvm2
+	url = https://github.com/lvmteam/lvm2
+[submodule "subrepo/nvme-cli"]
+	path = subrepo/nvme-cli
+	url = https://github.com/linux-nvme/nvme-cli
+[submodule "subrepo/libaio"]
+	path = subrepo/libaio
+	url = https://pagure.io/libaio.git
+[submodule "subrepo/util-linux"]
+	path = subrepo/util-linux
+	url = https://salsa.debian.org/debian/util-linux
+[submodule "subrepo/openssl"]
+	path = subrepo/openssl
+	url = https://github.com/openssl/openssl
+[submodule "subrepo/libnl"]
+	path = subrepo/libnl
+	url = https://github.com/tgraf/libnl.git
+[submodule "subrepo/popt"]
+	path = subrepo/popt
+	url = https://github.com/rpm-software-management/popt
+[submodule "subrepo/json-c"]
+	path = subrepo/json-c
+	url = https://github.com/json-c/json-c
