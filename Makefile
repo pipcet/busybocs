@@ -7,6 +7,8 @@ PWD = $(shell pwd)
 SUDO ?= $(and $(filter pip,$(shell whoami)),sudo)
 NATIVE_TRIPLE ?= amd64-linux-gnu
 
+MY_CFLAGS = -Os --sysroot=$(PWD)/build/busybocs/install -B$(PWD)/build/busybocs/install -L$(PWD)/build/busybocs/install/lib -I$(PWD)/build/busybocs/install/include
+
 all: build/busybocs.tar
 
 %/:
@@ -74,7 +76,7 @@ build/memtool/done/build: build/memtool/done/configure | build/memtool/done/
 
 build/memtool/done/configure: build/memtool/done/copy build/glibc/done/install | build/memtool/done/
 	(cd build/memtool/build; autoreconf -fi)
-	(cd build/memtool/build; ./configure --host=aarch64-linux-gnu --target=aarch64-linux-gnu --prefix=$(PWD)/build/busybocs/install)
+	(cd build/memtool/build; ./configure --host=aarch64-linux-gnu --target=aarch64-linux-gnu --prefix=$(PWD)/build/busybocs/install CFLAGS="$(MY_CFLAGS)")
 	touch $@
 
 build/memtool/done/copy: | build/memtool/build/ build/memtool/done/
@@ -91,7 +93,7 @@ build/kexec-tools/done/build: build/kexec-tools/done/configure | build/kexec-too
 
 build/kexec-tools/done/configure: build/kexec-tools/done/copy build/glibc/done/install | build/kexec-tools/done/
 	(cd build/kexec-tools/build; autoreconf -fi)
-	(cd build/kexec-tools/build; ./configure --host=aarch64-linux-gnu --prefix=$(PWD)/build/busybocs/install)
+	(cd build/kexec-tools/build; ./configure --host=aarch64-linux-gnu --target=aarch64-linux-gnu CFLAGS="$(MY_CFLAGS") --prefix=$(PWD)/build/busybocs/install)
 	touch $@
 
 build/kexec-tools/done/copy: | build/kexec-tools/build/ build/kexec-tools/done/
@@ -107,7 +109,7 @@ build/busybox/done/build: build/busybox/done/configure | build/busybox/done/
 	touch $@
 
 build/busybox/done/configure: build/busybox/done/copy build/glibc/done/install | build/busybox/done/
-	$(MAKE) -C build/busybox/build CROSS_COMPILE=aarch64-linux-gnu- defconfig
+	$(MAKE) -C build/busybox/build CROSS_COMPILE=aarch64-linux-gnu- CFLAGS="$(MY_CFLAGS)" defconfig
 	touch $@
 
 build/busybox/done/copy: | build/busybox/build/ build/busybox/done/
@@ -124,7 +126,7 @@ build/emacs/done/build: build/emacs/done/configure | build/emacs/done/
 
 build/emacs/done/configure: build/emacs/done/clean0 build/ncurses/done/install build/glibc/done/install | build/emacs/done/
 	(cd build/emacs/build; sh autogen.sh)
-	(cd build/emacs/build; ./configure --without-all --without-json --without-x --host=aarch64-linux-gnu CFLAGS="--sysroot=$(PWD)/build/busybocs/install -B$(PWD)/build/busybocs/install/lib -static" LDFLAGS="-L$(PWD)/build/busybocs/install/lib" --enable-optimize="-Os" --target=aarch64-linux-gnu --prefix=/)
+	(cd build/emacs/build; ./configure --without-all --without-json --without-x --host=aarch64-linux-gnu CFLAGS="$(MY_CFLAGS)" LDFLAGS="-L$(PWD)/build/busybocs/install/lib" --enable-optimize="-Os" --target=aarch64-linux-gnu --prefix=/)
 	touch $@
 
 build/emacs/done/clean0: build/emacs/done/copy0 | build/emacs/done/
@@ -175,7 +177,7 @@ build/glibc/done/build: build/glibc/done/configure | build/glibc/done/
 
 build/glibc/done/configure: build/glibc/done/copy | build/glibc/done/
 	$(MKDIR) build/glibc/build/
-	(cd build/glibc/build; $(PWD)/build/glibc/configure/configure --host=aarch64-linux-gnu --target=aarch64-linux-gnu --prefix=/ --host=aarch64-linux-gnu --target=aarch64-linux-gnu CFLAGS="-Os")
+	(cd build/glibc/build; $(PWD)/build/glibc/configure/configure --host=aarch64-linux-gnu --target=aarch64-linux-gnu --prefix=/ --host=aarch64-linux-gnu --target=aarch64-linux-gnu CFLAGS="$(MY_CFLAGS)")
 	touch $@
 
 build/glibc/done/copy: | build/glibc/configure/ build/glibc/done/
@@ -192,7 +194,7 @@ build/libnl/done/build: build/libnl/done/configure | build/libnl/done/
 
 build/libnl/done/configure: build/libnl/done/copy build/glibc/done/install | build/libnl/done/
 	(cd build/libnl/build; sh autogen.sh)
-	(cd build/libnl/build; ./configure --host=aarch64-linux-gnu --target=aarch64-linux-gnu --prefix=/ CFLAGS="-Os -I$(PWD)/build/busybocs/install/include --sysroot=$(PWD)/build/busybocs/install" LDFLAGS="-L$(PWD)/build/busybocs/install/lib")
+	(cd build/libnl/build; ./configure --host=aarch64-linux-gnu --target=aarch64-linux-gnu --prefix=/ CFLAGS="$(MY_CFLAGS)" LDFLAGS="-L$(PWD)/build/busybocs/install/lib")
 	touch $@
 
 build/libnl/done/copy: | build/libnl/build/ build/libnl/done/
@@ -208,7 +210,7 @@ build/lvm2/done/build: build/lvm2/done/configure | build/lvm2/done/
 	touch $@
 
 build/lvm2/done/configure: build/lvm2/done/copy build/libaio/done/install build/libblkid/done/install build/glibc/done/install | build/lvm2/done/
-	(cd build/lvm2/build; ./configure --host=aarch64-linux-gnu --target=aarch64-linux-gnu --prefix=/ CFLAGS="-B$(PWD)/build/busybocs/install -Os -I$(PWD)/build/busybocs/install/include --sysroot=$(PWD)/build/busybocs/install" LDFLAGS="-L$(PWD)/build/busybocs/install/lib")
+	(cd build/lvm2/build; ./configure --host=aarch64-linux-gnu --target=aarch64-linux-gnu --prefix=/ CFLAGS="$(MY_CFLAGS)" LDFLAGS="-L$(PWD)/build/busybocs/install/lib")
 	touch $@
 
 build/lvm2/done/copy: | build/lvm2/build/ build/lvm2/done/
@@ -225,7 +227,7 @@ build/libblkid/done/build: build/libblkid/done/configure | build/libblkid/done/
 
 build/libblkid/done/configure: build/libblkid/done/copy build/glibc/done/install | build/libblkid/done/
 	(cd build/libblkid/build; autoreconf -fi)
-	(cd build/libblkid/build; ./configure --disable-all-programs --enable-libblkid --host=aarch64-linux-gnu --target=aarch64-linux-gnu --prefix=/ CFLAGS="-Os -I$(PWD)/build/busybocs/install/include --sysroot=$(PWD)/build/busybocs/install" LDFLAGS="-L$(PWD)/build/busybocs/install/lib")
+	(cd build/libblkid/build; ./configure --disable-all-programs --enable-libblkid --host=aarch64-linux-gnu --target=aarch64-linux-gnu --prefix=/ CFLAGS="$(MY_CFLAGS)" LDFLAGS="-L$(PWD)/build/busybocs/install/lib")
 	touch $@
 
 build/libblkid/done/copy: | build/libblkid/build/ build/libblkid/done/
@@ -242,7 +244,7 @@ build/libuuid/done/build: build/libuuid/done/configure | build/libuuid/done/
 
 build/libuuid/done/configure: build/libuuid/done/copy build/glibc/done/install | build/libuuid/done/
 	(cd build/libuuid/build; autoreconf -fi)
-	(cd build/libuuid/build; ./configure --disable-all-programs --enable-libuuid --host=aarch64-linux-gnu --target=aarch64-linux-gnu --prefix=/ CFLAGS="-lgcc_s -Os -B$(PWD)/build/busybocs/install -L$(PWD)/build/busybocs/install/lib -I$(PWD)/build/busybocs/install/include --sysroot=$(PWD)/build/busybocs/install" LDFLAGS="-L$(PWD)/build/busybocs/install/lib")
+	(cd build/libuuid/build; ./configure --disable-all-programs --enable-libuuid --host=aarch64-linux-gnu --target=aarch64-linux-gnu --prefix=/ CFLAGS="$(MY_CFLAGS)" LDFLAGS="-L$(PWD)/build/busybocs/install/lib")
 	touch $@
 
 build/libuuid/done/copy: | build/libuuid/build/ build/libuuid/done/
@@ -250,11 +252,11 @@ build/libuuid/done/copy: | build/libuuid/build/ build/libuuid/done/
 	touch $@
 
 build/libaio/done/install: build/libaio/done/build | build/busybocs/install/done/install/ build/ build/busybocs/install/
-	$(MAKE) -C build/libaio/build CC=aarch64-linux-gnu-gcc CFLAGS="-Os -L$(PWD)/build/busybocs/install/lib" DESTDIR=$(PWD)/build/busybocs/install/ install
+	$(MAKE) -C build/libaio/build CC=aarch64-linux-gnu-gcc CFLAGS="$(MY_CFLAGS)" DESTDIR=$(PWD)/build/busybocs/install/ install
 	touch $@
 
 build/libaio/done/build: build/libaio/done/copy | build/libaio/done/
-	$(MAKE) -C build/libaio/build CC=aarch64-linux-gnu-gcc CFLAGS="-Os -L$(PWD)/build/busybocs/install/lib -I. --sysroot=$(PWD)/build/busybocs/install"
+	$(MAKE) -C build/libaio/build CC=aarch64-linux-gnu-gcc CFLAGS="$(MY_CFLAGS)"
 	touch $@
 
 build/libaio/done/copy: | build/libaio/build/ build/libaio/done/
@@ -266,7 +268,7 @@ build/wpa_supplicant/done/install: build/wpa_supplicant/done/build | build/busyb
 	touch $@
 
 build/wpa_supplicant/done/build: build/wpa_supplicant/done/configure | build/wpa_supplicant/done/
-	$(MAKE) -C build/wpa_supplicant/build/wpa_supplicant CC=aarch64-linux-gnu-gcc EXTRA_CFLAGS="-Os --sysroot=$(PWD)/build/busybocs/install -I$(PWD)/build/busybocs/install/include -L$(PWD)/build/busybocs/install/lib" LDFLAGS="--sysroot=$(PWD)/build/busybocs/install -I$(PWD)/build/busybocs/install/include -L$(PWD)/build/busybocs/install/lib"
+	$(MAKE) -C build/wpa_supplicant/build/wpa_supplicant CC=aarch64-linux-gnu-gcc EXTRA_CFLAGS="$(MY_CFALGS)" LDFLAGS="--sysroot=$(PWD)/build/busybocs/install -I$(PWD)/build/busybocs/install/include -L$(PWD)/build/busybocs/install/lib"
 	touch $@
 
 build/wpa_supplicant/done/configure: build/wpa_supplicant/done/copy build/openssl/done/install build/libnl/done/install build/glibc/done/install | build/wpa_supplicant/done/
@@ -282,11 +284,11 @@ build/openssl/done/install: build/openssl/done/build | build/openssl/done/ build
 	touch $@
 
 build/openssl/done/build: build/openssl/done/configure | build/openssl/done/
-	$(MAKE) CFLAGS="-L$(PWD)/build/busybocs/install/lib --sysroot=$(PWD)/build/busybocs/install -B$(PWD)/build/busybocs/install" -C build/openssl/build
+	$(MAKE) CFLAGS="$(MY_CFLAGS)" -C build/openssl/build
 	touch $@
 
 build/openssl/done/configure: build/openssl/done/copy build/glibc/done/install | build/openssl/done/
-	(cd build/openssl/build/; CC=aarch64-linux-gnu-gcc CFLAGS="-B$(PWD)/build/busybocs/install" ./Configure linux-aarch64 --prefix=$(PWD)/build/busybocs/install)
+	(cd build/openssl/build/; CC=aarch64-linux-gnu-gcc CFLAGS="$(MY_CFLAGS)" ./Configure linux-aarch64 --prefix=$(PWD)/build/busybocs/install)
 	touch $@
 
 build/openssl/done/copy: | build/openssl/build/ build/openssl/done/
@@ -303,7 +305,7 @@ build/cryptsetup/done/build: build/cryptsetup/done/configure | build/cryptsetup/
 
 build/cryptsetup/done/configure: build/cryptsetup/done/copy build/libuuid/done/install build/json-c/done/install build/popt/done/install build/libblkid/done/install build/lvm2/done/install build/openssl/done/install build/glibc/done/install | build/cryptsetup/done/
 	(cd build/cryptsetup/build; sh autogen.sh)
-	(cd build/cryptsetup/build; ./configure --target=aarch64-linux-gnu --host=aarch64-linux-gnu --prefix=/ CFLAGS="-Os --sysroot=$(PWD)/build/busybocs/install -I$(PWD)/build/busybocs/install/include -L$(PWD)/build/busybocs/install/lib"  JSON_C_CFLAGS="-I$(PWD)/build/busybocs/install/include" JSON_C_LIBS="-ljson-c")
+	(cd build/cryptsetup/build; ./configure --target=aarch64-linux-gnu --host=aarch64-linux-gnu --prefix=/ CFLAGS="$(MY_CFLAGS)"  JSON_C_CFLAGS="-I$(PWD)/build/busybocs/install/include" JSON_C_LIBS="-ljson-c")
 	touch $@
 
 build/cryptsetup/done/copy: | build/cryptsetup/build/ build/cryptsetup/done/
@@ -320,7 +322,7 @@ build/popt/done/build: build/popt/done/configure | build/popt/done/
 
 build/popt/done/configure: build/popt/done/copy build/libuuid/done/install build/glibc/done/install | build/popt/done/
 	(cd build/popt/build; sh autogen.sh)
-	(cd build/popt/build; ./configure --target=aarch64-linux-gnu --host=aarch64-linux-gnu --prefix=/ CFLAGS="-Os --sysroot=$(PWD)/build/busybocs/install")
+	(cd build/popt/build; ./configure --target=aarch64-linux-gnu --host=aarch64-linux-gnu --prefix=/ CFLAGS="$(MY_CFLAGS)")
 	touch $@
 
 build/popt/done/copy: | build/popt/build/ build/popt/done/
