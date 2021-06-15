@@ -166,7 +166,7 @@ build/ncurses/done/copy: | build/ncurses/build/ build/ncurses/done/
 
 build/glibc/done/install: build/glibc/done/build | build/glibc/done/ build/busybocs/install/
 	$(MAKE) -C build/glibc/build DESTDIR=$(PWD)/build/busybocs/install/ install
-	sudo cp $(PWD)/build/busybocs/install/lib/* /usr/aarch64-linux-gnu/lib
+	sudo cp -a $(PWD)/build/busybocs/install/lib/* /usr/aarch64-linux-gnu/lib
 	touch $@
 
 build/glibc/done/build: build/glibc/done/configure | build/glibc/done/
