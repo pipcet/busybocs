@@ -117,7 +117,7 @@ build/busybox/done/copy: | build/busybox/build/ build/busybox/done/
 	touch $@
 
 build/emacs/done/install: build/emacs/done/build | build/ build/busybocs/install/
-	$(MAKE) -C build/emacs/build DESTDIR=$(PWD)/build/busybocs/install/ install
+	QEMU_LD_PREFIX=$(PWD)/build/busybocs/install LD_LIBRARY_PATH=$(PWD)/build/busybocs/install/lib $(MAKE) -C build/emacs/build DESTDIR=$(PWD)/build/busybocs/install/ install
 	touch $@
 
 build/emacs/done/build: build/emacs/done/configure | build/emacs/done/
@@ -210,7 +210,7 @@ build/lvm2/done/build: build/lvm2/done/configure | build/lvm2/done/
 	touch $@
 
 build/lvm2/done/configure: build/lvm2/done/copy build/libaio/done/install build/libblkid/done/install build/glibc/done/install | build/lvm2/done/
-	(cd build/lvm2/build; ./configure --host=aarch64-linux-gnu --target=aarch64-linux-gnu --prefix=/ CFLAGS="$(MY_CFLAGS)" LDFLAGS="-L$(PWD)/build/busybocs/install/lib")
+	(cd build/lvm2/build; ./configure --host=aarch64-linux-gnu --target=aarch64-linux-gnu --prefix=/ CFLAGS="$(MY_CFLAGS) -I." LDFLAGS="-L$(PWD)/build/busybocs/install/lib")
 	touch $@
 
 build/lvm2/done/copy: | build/lvm2/build/ build/lvm2/done/
