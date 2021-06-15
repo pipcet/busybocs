@@ -49,3 +49,6 @@
 [submodule "subrepo/json-c"]
 	path = subrepo/json-c
 	url = https://github.com/json-c/json-c
+[submodule "subrepo/wpa"]
+	path = subrepo/wpa
+	url = https://salsa.debian.org/debian/wpa.git
