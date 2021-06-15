@@ -93,7 +93,7 @@ build/kexec-tools/done/build: build/kexec-tools/done/configure | build/kexec-too
 
 build/kexec-tools/done/configure: build/kexec-tools/done/copy build/glibc/done/install | build/kexec-tools/done/
 	(cd build/kexec-tools/build; autoreconf -fi)
-	(cd build/kexec-tools/build; ./configure --host=aarch64-linux-gnu --target=aarch64-linux-gnu CFLAGS="$(MY_CFLAGS") --prefix=$(PWD)/build/busybocs/install)
+	(cd build/kexec-tools/build; ./configure --host=aarch64-linux-gnu --target=aarch64-linux-gnu CFLAGS="$(MY_CFLAGS)" --prefix=$(PWD)/build/busybocs/install)
 	touch $@
 
 build/kexec-tools/done/copy: | build/kexec-tools/build/ build/kexec-tools/done/
@@ -101,11 +101,11 @@ build/kexec-tools/done/copy: | build/kexec-tools/build/ build/kexec-tools/done/
 	touch $@
 
 build/busybox/done/install: build/busybox/done/build | build/busybox/done/ build/busybocs/install/
-	$(MAKE) -C build/busybox/build CROSS_COMPILE=aarch64-linux-gnu- install
+	$(MAKE) -C build/busybox/build CROSS_COMPILE=aarch64-linux-gnu- CFLAGS="$(MY_CFLAGS)" install
 	touch $@
 
 build/busybox/done/build: build/busybox/done/configure | build/busybox/done/
-	$(MAKE) -C build/busybox/build CROSS_COMPILE=aarch64-linux-gnu-
+	$(MAKE) -C build/busybox/build CROSS_COMPILE=aarch64-linux-gnu- CFLAGS="$(MY_CFLAGS)"
 	touch $@
 
 build/busybox/done/configure: build/busybox/done/copy build/glibc/done/install | build/busybox/done/
@@ -121,7 +121,7 @@ build/emacs/done/install: build/emacs/done/build | build/ build/busybocs/install
 	touch $@
 
 build/emacs/done/build: build/emacs/done/configure | build/emacs/done/
-	$(MAKE) -C build/emacs/build/src emacs
+	QEMU_LD_PREFIX=$(PWD)/build/busybocs/install LD_LIBRARY_PATH=$(PWD)/build/busybocs/install/lib $(MAKE) -C build/emacs/build/src emacs
 	touch $@
 
 build/emacs/done/configure: build/emacs/done/clean0 build/ncurses/done/install build/glibc/done/install | build/emacs/done/
@@ -159,7 +159,7 @@ build/ncurses/done/build: build/ncurses/done/configure | build/ncurses/done/
 	touch $@
 
 build/ncurses/done/configure: build/ncurses/done/copy build/glibc/done/install | build/ncurses/done/
-	(cd build/ncurses/build; ./configure --host=aarch64-linux-gnu --target=aarch64-linux-gnu --prefix=/ --with-install-prefix=$(PWD)/build/busybocs/install --disable-stripping)
+	(cd build/ncurses/build; ./configure --host=aarch64-linux-gnu --target=aarch64-linux-gnu --prefix=/ --with-install-prefix=$(PWD)/build/busybocs/install --disable-stripping CFLAGS="$(MY_CFLAGS)" CXXFLAGS="$(MY_CFLAGS)")
 	touch $@
 
 build/ncurses/done/copy: | build/ncurses/build/ build/ncurses/done/
