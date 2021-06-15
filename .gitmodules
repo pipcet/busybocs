@@ -27,7 +27,8 @@
 	url = https://gitlab.com/cryptsetup/cryptsetup
 [submodule "subrepo/lvm2"]
 	path = subrepo/lvm2
-	url = https://github.com/lvmteam/lvm2
+	url = https://github.com/pipcet/lvm2
+	branch = pearl
 [submodule "subrepo/nvme-cli"]
 	path = subrepo/nvme-cli
 	url = https://github.com/linux-nvme/nvme-cli
