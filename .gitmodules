@@ -53,3 +53,7 @@
 [submodule "subrepo/wpa"]
 	path = subrepo/wpa
 	url = https://salsa.debian.org/debian/wpa.git
+[submodule "subrepo/gcc"]
+	path = subrepo/gcc
+	url = https://github.com/pipcet/gcc
+	branch = pearl
