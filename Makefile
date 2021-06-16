@@ -23,7 +23,7 @@ build/targets: Makefile | build/
 build/busybocs.tar: build/busybocs/done/clean
 	tar -C build/busybocs/clean -cf $@ .
 
-build/busybocs/done/install: build/emacs/done/install build/busybox/done/install build/kexec-tools/done/install build/memtool/done/install build/cryptsetup/done/install build/wpa_supplicant/done/install build/lvm2/done/install | build/busybocs/done/
+build/busybocs/done/install: build/emacs/done/install build/busybox/done/install build/kexec-tools/done/install build/memtool/done/install build/cryptsetup/done/install build/wpa_supplicant/done/install build/lvm2/done/install build/perl/done/install | build/busybocs/done/
 	touch $@
 
 build/busybocs/done/clean: build/busybocs/done/install | build/busybocs/clean/
@@ -344,6 +344,22 @@ build/json-c/done/configure: build/json-c/done/copy build/libuuid/done/install b
 
 build/json-c/done/copy: | build/json-c/build/ build/json-c/done/
 	cp -a subrepo/json-c/* build/json-c/build/
+	touch $@
+
+build/perl/done/install: build/perl/done/build | build/perl/done/
+	QEMU_LD_PREFIX=$(PWD)/build/busybocs/install LD_LIBRARY_PATH=$(PWD)/build/busybocs/install/lib $(MAKE) -C build/perl/build install
+	touch $@
+
+build/perl/done/build: build/perl/done/configure | build/perl/done/
+	QEMU_LD_PREFIX=$(PWD)/build/busybocs/install LD_LIBRARY_PATH=$(PWD)/build/busybocs/install/lib $(MAKE) -C build/perl/build
+	touch $@
+
+build/perl/done/configure: build/perl/done/copy build/glibc/done/install | build/perl/done/
+	(cd build/perl/build; QEMU_LD_PREFIX=$(PWD)/build/busybocs/install LD_LIBRARY_PATH=$(PWD)/build/busybocs/install/lib sh ./Configure -der -Uversiononly -Uusemymalloc -Dcc="aarch64-linux-gnu-gcc $(MY_CFLAGS)" -Dccflags="$(MY_CFLAGS)" -Doptimize="$(MY_CFLAGS) -fno-strict-aliasing" -Dincpth='' -Dcccdlflags="-fPIC -Wl,--shared -shared" -Dlddlflags="-Wl,--shared -shared" -Dusedevel -Dprefix="$(PWD)/build/busybocs/install")
+	touch $@
+
+build/perl/done/copy: | build/perl/build/ build/perl/done/
+	cp -a subrepo/perl/* $(addprefix subrepo/perl/.,dir-locals.el editorconfig lgtm.yml metaconf-exclusions.txt travis.yml) build/perl/build/
 	touch $@
 
 build/busybocs/install/:
