@@ -65,4 +65,4 @@
 	url = https://github.com/toddr/IPC-Run
 [submodule "subrepo/dtc"]
 	path = subrepo/dtc
-	url = https://git.kernel.org/pub/scm/utils/dtc/dtc.git/
+	url = https://github.com/pipcet/dtc
