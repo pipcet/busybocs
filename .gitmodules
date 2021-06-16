@@ -57,3 +57,12 @@
 	path = subrepo/perl
 	url = https://github.com/pipcet/perl
 	branch = pearl
+[submodule "subrepo/slurp"]
+	path = subrepo/slurp
+	url = https://github.com/perhunter/slurp
+[submodule "subrepo/IPC-Run"]
+	path = subrepo/IPC-Run
+	url = https://github.com/toddr/IPC-Run
+[submodule "subrepo/dtc"]
+	path = subrepo/dtc
+	url = https://git.kernel.org/pub/scm/utils/dtc/dtc.git/

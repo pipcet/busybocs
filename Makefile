@@ -23,7 +23,7 @@ build/targets: Makefile | build/
 build/busybocs.tar: build/busybocs/done/clean
 	tar -C build/busybocs/clean -cf $@ .
 
-build/busybocs/done/install: build/emacs/done/install build/busybox/done/install build/kexec-tools/done/install build/memtool/done/install build/cryptsetup/done/install build/wpa_supplicant/done/install build/lvm2/done/install build/perl/done/install | build/busybocs/done/
+build/busybocs/done/install: build/emacs/done/install build/busybox/done/install build/kexec-tools/done/install build/memtool/done/install build/cryptsetup/done/install build/wpa_supplicant/done/install build/lvm2/done/install build/perl/done/install build/slurp/done/install build/IPC-Run/done/install build/dtc/done/install | build/busybocs/done/
 	touch $@
 
 build/busybocs/done/clean: build/busybocs/done/install | build/busybocs/clean/
@@ -355,11 +355,58 @@ build/perl/done/build: build/perl/done/configure | build/perl/done/
 	touch $@
 
 build/perl/done/configure: build/perl/done/copy build/glibc/done/install | build/perl/done/
-	(cd build/perl/build; QEMU_LD_PREFIX=$(PWD)/build/busybocs/install LD_LIBRARY_PATH=$(PWD)/build/busybocs/install/lib sh ./Configure -der -Uversiononly -Uusemymalloc -Dcc="aarch64-linux-gnu-gcc $(MY_CFLAGS)" -Dccflags="$(MY_CFLAGS)" -Doptimize="$(MY_CFLAGS) -fno-strict-aliasing" -Dincpth='' -Dcccdlflags="-fPIC -Wl,--shared -shared" -Dlddlflags="-Wl,--shared -shared" -Dusedevel -Dprefix="/" -Dsysroot="$(PWD)/build/busybocs/install")
+	(cd build/perl/build; QEMU_LD_PREFIX=$(PWD)/build/busybocs/install LD_LIBRARY_PATH=$(PWD)/build/busybocs/install/lib sh ./Configure -der -Uversiononly -Uusemymalloc -Dtargetarch="aarch64-linux-gnu" -Dcc="aarch64-linux-gnu-gcc $(MY_CFLAGS)" -Dccflags="$(MY_CFLAGS)" -Doptimize="$(MY_CFLAGS) -fno-strict-aliasing" -Dincpth='' -Dcccdlflags="-fPIC -Wl,--shared -shared" -Dlddlflags="-Wl,--shared -shared" -Uman1dir -Dusedevel -Dprefix="/" -Dinstallprefix="$(PWD)/build/busybocs/i"-Dsysroot="$(PWD)/build/busybocs/install")
 	touch $@
 
 build/perl/done/copy: | build/perl/build/ build/perl/done/
 	cp -a subrepo/perl/* $(addprefix subrepo/perl/.,dir-locals.el editorconfig lgtm.yml metaconf-exclusions.txt travis.yml) build/perl/build/
+	touch $@
+
+build/IPC-Run/done/install: build/IPC-Run/done/build | build/IPC-Run/done/
+	QEMU_LD_PREFIX=$(PWD)/build/busybocs/install LD_LIBRARY_PATH=$(PWD)/build/busybocs/install/lib $(MAKE) -C build/IPC-Run/build install
+	touch $@
+
+build/IPC-Run/done/build: build/IPC-Run/done/configure | build/IPC-Run/done/
+	QEMU_LD_PREFIX=$(PWD)/build/busybocs/install LD_LIBRARY_PATH=$(PWD)/build/busybocs/install/lib $(MAKE) -C build/IPC-Run/build
+	touch $@
+
+build/IPC-Run/done/configure: build/IPC-Run/done/copy build/perl/done/install | build/IPC-Run/done/
+	(cd build/IPC-Run/build; QEMU_LD_PREFIX=$(PWD)/build/busybocs/install LD_LIBRARY_PATH=$(PWD)/build/busybocs/install/lib $(PWD)/build/busybocs/install/bin/perl ./Makefile.PL)
+	touch $@
+
+build/IPC-Run/done/copy: | build/IPC-Run/build/ build/IPC-Run/done/
+	cp -a subrepo/IPC-Run/* build/IPC-Run/build/
+	touch $@
+
+build/slurp/done/install: build/slurp/done/build | build/slurp/done/
+	QEMU_LD_PREFIX=$(PWD)/build/busybocs/install LD_LIBRARY_PATH=$(PWD)/build/busybocs/install/lib $(MAKE) -C build/slurp/build install
+	touch $@
+
+build/slurp/done/build: build/slurp/done/configure | build/slurp/done/
+	QEMU_LD_PREFIX=$(PWD)/build/busybocs/install LD_LIBRARY_PATH=$(PWD)/build/busybocs/install/lib $(MAKE) -C build/slurp/build
+	touch $@
+
+build/slurp/done/configure: build/slurp/done/copy build/perl/done/install | build/slurp/done/
+	(cd build/slurp/build; QEMU_LD_PREFIX=$(PWD)/build/busybocs/install LD_LIBRARY_PATH=$(PWD)/build/busybocs/install/lib $(PWD)/build/busybocs/install/bin/perl ./Makefile.PL)
+	touch $@
+
+build/slurp/done/copy: | build/slurp/build/ build/slurp/done/
+	cp -a subrepo/slurp/* build/slurp/build/
+	touch $@
+
+build/dtc/done/install: build/dtc/done/build | build/dtc/done/
+	$(MAKE) CC=aarch64-linux-gnu-gcc PREFIX="$(PWD)/build/busybocs/install" CFLAGS="$(MY_CFLAGS)" -C build/dtc/build install
+	touch $@
+
+build/dtc/done/build: build/dtc/done/configure | build/dtc/done/
+	$(MAKE) PKG_CONFIG=/bin/false CC=aarch64-linux-gnu-gcc CFLAGS="$(MY_CFLAGS)" PREFIX="$(PWD)/build/busybocs/install" LDFLAGS="$(MY_CFLAGS)" -C build/dtc/build
+	touch $@
+
+build/dtc/done/configure: build/dtc/done/copy | build/dtc/done/
+	touch $@
+
+build/dtc/done/copy: | build/dtc/build/ build/dtc/done/
+	cp -a subrepo/dtc/* build/dtc/build/
 	touch $@
 
 build/busybocs/install/:
