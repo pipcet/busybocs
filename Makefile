@@ -355,7 +355,7 @@ build/perl/done/build: build/perl/done/configure | build/perl/done/
 	touch $@
 
 build/perl/done/configure: build/perl/done/copy build/glibc/done/install | build/perl/done/
-	(cd build/perl/build; QEMU_LD_PREFIX=$(PWD)/build/busybocs/install LD_LIBRARY_PATH=$(PWD)/build/busybocs/install/lib sh ./Configure -der -Uversiononly -Uusemymalloc -Dcc="aarch64-linux-gnu-gcc $(MY_CFLAGS)" -Dccflags="$(MY_CFLAGS)" -Doptimize="$(MY_CFLAGS) -fno-strict-aliasing" -Dincpth='' -Dcccdlflags="-fPIC -Wl,--shared -shared" -Dlddlflags="-Wl,--shared -shared" -Dusedevel -Dprefix="$(PWD)/build/busybocs/install")
+	(cd build/perl/build; QEMU_LD_PREFIX=$(PWD)/build/busybocs/install LD_LIBRARY_PATH=$(PWD)/build/busybocs/install/lib sh ./Configure -der -Uversiononly -Uusemymalloc -Dcc="aarch64-linux-gnu-gcc $(MY_CFLAGS)" -Dccflags="$(MY_CFLAGS)" -Doptimize="$(MY_CFLAGS) -fno-strict-aliasing" -Dincpth='' -Dcccdlflags="-fPIC -Wl,--shared -shared" -Dlddlflags="-Wl,--shared -shared" -Dusedevel -Dprefix="/" -Dsysroot="$(PWD)/build/busybocs/install")
 	touch $@
 
 build/perl/done/copy: | build/perl/build/ build/perl/done/
