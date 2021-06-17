@@ -6,6 +6,7 @@ TAR ?= tar
 PWD = $(shell pwd)
 SUDO ?= $(and $(filter pip,$(shell whoami)),sudo)
 NATIVE_TRIPLE ?= amd64-linux-gnu
+CROSS_CC = $(PWD)/build/busybocs/host/bin/aarch64-linux-gnu-gcc
 
 MY_CFLAGS = -Os --sysroot=$(PWD)/build/busybocs/install -B$(PWD)/build/busybocs/install -L$(PWD)/build/busybocs/install/lib -I$(PWD)/build/busybocs/install/include
 
@@ -23,7 +24,7 @@ build/targets: Makefile | build/
 build/busybocs.tar: build/busybocs/done/clean
 	tar -C build/busybocs/clean -cf $@ .
 
-build/busybocs/done/install: build/emacs/done/install build/busybox/done/install build/kexec-tools/done/install build/memtool/done/install build/cryptsetup/done/install build/wpa_supplicant/done/install build/lvm2/done/install | build/busybocs/done/
+build/busybocs/done/install: build/emacs/done/install build/busybox/done/install build/kexec-tools/done/install build/memtool/done/install build/cryptsetup/done/install build/wpa_supplicant/done/install build/lvm2/done/install build/libgcc/done/install | build/busybocs/done/
 	touch $@
 
 build/busybocs/done/clean: build/busybocs/done/install | build/busybocs/clean/
@@ -345,6 +346,31 @@ build/json-c/done/configure: build/json-c/done/copy build/libuuid/done/install b
 build/json-c/done/copy: | build/json-c/build/ build/json-c/done/
 	cp -a subrepo/json-c/* build/json-c/build/
 	touch $@
+
+build/libgcc/done/build: | build/libgcc/done/ build/busybocs/install/lib/
+	$(CP) /usr/aarch64-linux-gnu/lib/libgcc_s.so /usr/aarch64-linux-gnu/lib/libgcc_s.so.1 build/busybocs/install/lib/
+
+# build/libgcc/done/build: build/libgcc/done/configure | build/libgcc/done/
+# 	$(MAKE) -C build/libgcc/build
+# 	touch $@
+
+# build/libgcc/done/configure: build/gcc/done/copy build/glibc/done/install | build/libgcc/done/ build/libgcc/build/
+# 	(cd build/libgcc/build; $(PWD)/build/gcc/src/configure --target=aarch64-linux-gnu --enable-languages=c,lto --disable-threads --disable-bootstrap --with-build-sysroot="$(PWD)/build/busybocs/install")
+# 	touch $@
+
+# build/gcc/done/install: build/gcc/done/build | build/gcc/done/
+
+# build/gcc/done/build: build/gcc/done/configure | build/gcc/done/
+# 	$(MAKE) -C build/gcc/build
+# 	touch $@
+
+# build/gcc/done/configure: build/gcc/done/copy | build/gcc/done/ build/gcc/build/
+# 	(cd build/gcc/build; ../src/configure --target=aarch64-linux-gnu --enable-languages=c,lto --disable-threads --disable-bootstrap --prefix="/" --with-build-sysroot="$(PWD)/build/busybocs/install" --disable-libgcc --disable-libssp --disable-libquadmath --disable-libatomic --disable-libgomp)
+# 	touch $@
+
+# build/gcc/done/copy: | build/gcc/src/ build/gcc/done/
+# 	cp -a subrepo/gcc/* build/gcc/src/
+# 	touch $@
 
 build/busybocs/install/:
 	$(MKDIR) $@
