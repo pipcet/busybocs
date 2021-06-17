@@ -347,7 +347,7 @@ build/json-c/done/copy: | build/json-c/build/ build/json-c/done/
 	cp -a subrepo/json-c/* build/json-c/build/
 	touch $@
 
-build/libgcc/done/build: | build/libgcc/done/ build/busybocs/install/lib/
+build/libgcc/done/install: | build/libgcc/done/ build/busybocs/install/lib/
 	$(CP) /usr/aarch64-linux-gnu/lib/libgcc_s.so /usr/aarch64-linux-gnu/lib/libgcc_s.so.1 build/busybocs/install/lib/
 
 # build/libgcc/done/build: build/libgcc/done/configure | build/libgcc/done/
