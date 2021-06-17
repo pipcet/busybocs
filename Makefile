@@ -350,7 +350,7 @@ build/json-c/done/copy: | build/json-c/build/ build/json-c/done/
 build/libgcc/done/install: | build/libgcc/done/ build/busybocs/install/lib/
 	find / -name libgcc_s.so | grep aarch64 | while read FILE; do cp $$FILE build/busybocs/install/lib; done
 	find / -name libgcc_s.so.1 | grep aarch64 | while read FILE; do cp $$FILE build/busybocs/install/lib; done
-	$(CP) /usr/aarch64-linux-gnu/lib/libgcc_s.so /usr/aarch64-linux-gnu/lib/libgcc_s.so.1 build/busybocs/install/lib/
+	touch $@
 
 # build/libgcc/done/build: build/libgcc/done/configure | build/libgcc/done/
 # 	$(MAKE) -C build/libgcc/build
